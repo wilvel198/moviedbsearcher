@@ -1,6 +1,7 @@
 package com.macmillan.movieinfo.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -60,6 +61,7 @@ public class Controllers {
 		for(int x = 0; x < all.size();x++) {
 			
 			System.out.println(all.get(x).getTitle());
+			System.out.println(all.get(x).getId());
 			
 		}
 		return "succes";
@@ -67,15 +69,24 @@ public class Controllers {
 	
 	@GetMapping("/getmoviebyid/{movieId}")
 	MovieData getMovieById(@PathVariable("movieId") String movieId) {
+		boolean movieCached = false;
 		
 		logger.info("ID Received " + movieId);
 		
+		logger.info( movieDataRepository.findById(Long.parseLong(movieId)).isPresent());
+		
+		movieCached = movieDataRepository.findById(Long.parseLong(movieId)).isPresent();
+		
+		
+		
 		MovieData movieInfo = Utilities.getMovieById(movieId);
 		
-		MovieData myMovie = new MovieData();
-		myMovie.setTitle("the lost boys");
 		
-		return myMovie;
+		
+			movieDataRepository.save(movieInfo);
+
+		
+		return movieInfo;
 	}
 	
 
