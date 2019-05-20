@@ -1,5 +1,6 @@
 package com.macmillan.movieinfo.controllers;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -99,13 +100,19 @@ public class Controllers {
 	}
 	
 	//this method is used to return all items from search
+	@SuppressWarnings("deprecation")
 	@PostMapping("/searchbyname")
 	List<MovieData> movieFullSearch(@RequestBody SearchObject searcher){
 		logger.info("============  searching by name =====================");
 		logger.info(searcher.getSearchString());
+		String searchString = null;
+		searchString = URLEncoder.encode(searcher.getSearchString());
+		logger.info("encoded search string " + searchString);
+		
+		List<MovieData> movieInfo = Utilities.searchByName(searchString);
 		
 		
-		return null;
+		return movieInfo;
 	}
 	
 
