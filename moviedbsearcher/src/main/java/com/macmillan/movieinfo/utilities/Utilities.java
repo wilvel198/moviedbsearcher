@@ -88,7 +88,8 @@ final static Log logger = LogFactory.getLog(Utilities.class);
 		myMovie.setPopularity(movieData.getPopularity());
 		
 		myMovie.setGenres(genreString);
-		myMovie.setFullJson("TODO");
+		myMovie.setFullJson(movieData.getId());
+		myMovie.setMovieID(movieData.getId());
 		
 		Spoken_languages[] langs = movieData.getSpoken_languages();
 		

@@ -24,6 +24,7 @@ public class MovieData {
 	private String popularity;
 	private String spoken_languages;
 	private String fullJson;
+	private String movieID;
 	public Long getId() {
 		return id;
 	}
@@ -65,6 +66,12 @@ public class MovieData {
 	}
 	public void setFullJson(String fullJson) {
 		this.fullJson = fullJson;
+	}
+	public String getMovieID() {
+		return movieID;
+	}
+	public void setMovieID(String movieID) {
+		this.movieID = movieID;
 	}
 
 }

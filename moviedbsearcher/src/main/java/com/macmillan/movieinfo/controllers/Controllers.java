@@ -1,5 +1,6 @@
 package com.macmillan.movieinfo.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.macmillan.movieinfo.models.MovieData;
+import com.macmillan.movieinfo.models.SearchObject;
 import com.macmillan.movieinfo.repositories.MovieDataRepository;
 import com.macmillan.movieinfo.utilities.Utilities;
 
@@ -49,7 +51,7 @@ public class Controllers {
 	}
 	
 	@GetMapping("/getallrecords")
-	String getallrecords() {
+	List<MovieData> getallrecords() {
 		
 		List<MovieData> all = movieDataRepository.findAll();
 		
@@ -62,31 +64,48 @@ public class Controllers {
 			
 			System.out.println(all.get(x).getTitle());
 			System.out.println(all.get(x).getId());
+			System.out.println(all.get(x).getMovieID());
+			System.out.println(all.get(x).getFullJson());
 			
 		}
-		return "succes";
+		return all;
 	}
 	
 	@GetMapping("/getmoviebyid/{movieId}")
 	MovieData getMovieById(@PathVariable("movieId") String movieId) {
 		boolean movieCached = false;
+		MovieData movieInfo = null;
+		int movieSize = 0;
 		
 		logger.info("ID Received " + movieId);
 		
-		logger.info( movieDataRepository.findById(Long.parseLong(movieId)).isPresent());
+		List<MovieData> movieIDFromDb = movieDataRepository.getMovieDbInfo(movieId);
 		
-		movieCached = movieDataRepository.findById(Long.parseLong(movieId)).isPresent();
+		logger.info("number of items is " + movieIDFromDb.size());
 		
-		
-		
-		MovieData movieInfo = Utilities.getMovieById(movieId);
-		
-		
-		
-			movieDataRepository.save(movieInfo);
+		movieSize = movieIDFromDb.size();
+		 
+		if(movieSize > 0) {
+			logger.info("=====> the movie is in the cache <========");
+			return movieIDFromDb.get(0);
+			
+		}else {
+		 movieInfo = Utilities.getMovieById(movieId);
+		 movieDataRepository.save(movieInfo);
+			
+		}
 
-		
 		return movieInfo;
+	}
+	
+	//this method is used to return all items from search
+	@PostMapping("/searchbyname")
+	List<MovieData> movieFullSearch(@RequestBody SearchObject searcher){
+		logger.info("============  searching by name =====================");
+		logger.info(searcher.getSearchString());
+		
+		
+		return null;
 	}
 	
 
