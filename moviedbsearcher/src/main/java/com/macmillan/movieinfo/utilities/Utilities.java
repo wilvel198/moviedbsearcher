@@ -118,13 +118,12 @@ public class Utilities {
 		DBMovieSearch searchResults = gson.fromJson(json, DBMovieSearch.class);
 
 		Results[] resultInfo = searchResults.getResults();
-
-		for (int x = 0; x < resultInfo.length; x++) {
-
-			String movieID = resultInfo[x].getId();
-			movieResults.add(getMovieById(movieID));
-
+		
+		for(Results resultData: resultInfo) {
+			String movieID = resultData.getId();
+			movieResults.add(getMovieById(movieID));			
 		}
+
 
 		return movieResults;
 	}
