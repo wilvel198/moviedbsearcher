@@ -9,7 +9,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
@@ -20,17 +24,21 @@ import com.macmillan.movieinfo.searchmodel.Results;
 import com.macmillan.movieinfo.smoviemodel.DBMovieInfo;
 import com.macmillan.movieinfo.smoviemodel.Genres;
 import com.macmillan.movieinfo.smoviemodel.Spoken_languages;
+import org.springframework.core.env.Environment;
 
+
+@Configuration
+@PropertySource(value="classpath:application.properties")
 public class Utilities {
-
+	
+	@Value("${api_key}")
+	private String api_key;
 	final static Log logger = LogFactory.getLog(Utilities.class);
 
 	@Autowired
 	private static MovieDataRepository movieDataRepository;
 	
-	@Value("${api_key}")
-	private static String apiKey;
-
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
@@ -108,8 +116,10 @@ public class Utilities {
 	}
 
 	public static List<MovieData> searchByName(String searchString) {
+		Utilities myUtils = new Utilities();
+		
 		logger.info("==================== searching by name ========================");
-		logger.info(apiKey);
+		logger.info("api key val ==>" + myUtils.api_key);
 		
 		String searchURL = "https://api.themoviedb.org/3/search/movie?api_key=88c29ac032cbe7242634c3450e93bdfd&language=en-US&query="
 				+ searchString + "&page=1&include_adult=false";
@@ -120,19 +130,14 @@ public class Utilities {
 
 		ResponseEntity<String> serverInfo = conntectToService(searchURL);
 
-		logger.info(serverInfo.getBody().toString());
-
 		json = serverInfo.getBody().toString();
 
 		DBMovieSearch searchResults = gson.fromJson(json, DBMovieSearch.class);
 
 		Results[] resultInfo = searchResults.getResults();
 
-		logger.info("number of items found ==>" + resultInfo.length);
-
 		for (int x = 0; x < resultInfo.length; x++) {
 
-			logger.info("movie ID ==>" + resultInfo[x].getId());
 			String movieID = resultInfo[x].getId();
 			movieResults.add(getMovieById(movieID));
 

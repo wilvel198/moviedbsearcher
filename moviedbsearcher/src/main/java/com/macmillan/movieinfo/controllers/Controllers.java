@@ -39,7 +39,8 @@ public class Controllers {
 	String healthCheck() {
 		
 		
-		return "succes";
+		return "{\"status\":\"success\"}";
+		
 	}
 	
 	@PostMapping("/addmoviedata")
