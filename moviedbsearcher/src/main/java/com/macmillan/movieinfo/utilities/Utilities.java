@@ -4,34 +4,22 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
 import com.google.gson.Gson;
 import com.macmillan.movieinfo.models.MovieData;
-import com.macmillan.movieinfo.repositories.MovieDataRepository;
 import com.macmillan.movieinfo.searchmodel.DBMovieSearch;
 import com.macmillan.movieinfo.searchmodel.Results;
 import com.macmillan.movieinfo.smoviemodel.DBMovieInfo;
 import com.macmillan.movieinfo.smoviemodel.Genres;
 import com.macmillan.movieinfo.smoviemodel.Spoken_languages;
-import org.springframework.core.env.Environment;
+
 
 public class Utilities {
 
 	final static Log logger = LogFactory.getLog(Utilities.class);
-
-	@Autowired
-	private static MovieDataRepository movieDataRepository;
 
 	public static ResponseEntity<String> conntectToService(String URL) {
 		logger.info("=============> get service information <===================");
@@ -83,7 +71,6 @@ public class Utilities {
 		}
 
 		myMovie.setPopularity(movieData.getPopularity());
-
 		myMovie.setGenres(genreString);
 		myMovie.setFullJson(movieData.getId());
 		myMovie.setMovieID(movieData.getId());
@@ -100,7 +87,7 @@ public class Utilities {
 	}
 
 	public static List<MovieData> searchByName(String searchString) {
-		Utilities myUtils = new Utilities();
+		
 
 		logger.info("==================== searching by name ========================");
 

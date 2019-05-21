@@ -26,7 +26,7 @@ public class TestUtils {
 	
 	
 	@Test
-	public void testConnection() {
+	public void testConnectToService() {
 		
 		Utilities utils = new Utilities();
 		
@@ -39,7 +39,7 @@ public class TestUtils {
 	
 	
 	@Test
-	public void testResult() {
+	public void testSearchByName() {
 		String URL = "https://api.themoviedb.org/3/search/movie?api_key=88c29ac032cbe7242634c3450e93bdfd&language=en-US&query=the%20lost%20boys&page=1&include_adult=false";
 		
 		Utilities utils = new Utilities();
