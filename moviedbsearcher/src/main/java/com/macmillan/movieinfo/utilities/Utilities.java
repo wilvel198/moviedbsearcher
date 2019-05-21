@@ -27,26 +27,18 @@ import com.macmillan.movieinfo.smoviemodel.Spoken_languages;
 import org.springframework.core.env.Environment;
 
 
-@Configuration
-@PropertySource(value="classpath:application.properties")
+
 public class Utilities {
 	
-	@Value("${api_key}")
-	private String api_key;
 	final static Log logger = LogFactory.getLog(Utilities.class);
 
 	@Autowired
 	private static MovieDataRepository movieDataRepository;
 	
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
 
 	public static ResponseEntity<String> conntectToService(String URL) {
 		logger.info("=============> get service information <===================");
-		String respInfo = null;
+		
 		ResponseEntity<String> result = null;
 
 		RestTemplate restTemplate = new RestTemplate();
@@ -65,6 +57,7 @@ public class Utilities {
 	}
 
 	public static MovieData getMovieById(String movieId) {
+		logger.info("===================== get movie by id =====================");
 		logger.info("retrieving movie by ID " + movieId);
 		String json = null;
 		String genreString = "";
@@ -74,17 +67,13 @@ public class Utilities {
 		String URL = "https://api.themoviedb.org/3/movie/" + movieId
 				+ "?api_key=88c29ac032cbe7242634c3450e93bdfd&language=en-US";
 
-		logger.info("==========================> get the movie <=====================");
-		logger.info(URL);
 		ResponseEntity<String> serverInfo = conntectToService(URL);
 
-		logger.info(serverInfo.getBody().toString());
 
 		json = serverInfo.getBody().toString();
 
 		DBMovieInfo movieData = gson.fromJson(json, DBMovieInfo.class);
 
-		logger.info("movie title =>" + movieData.getTitle());
 		myMovie.setTitle(movieData.getTitle());
 		myMovie.setId(Long.parseLong(movieData.getId()));
 		myMovie.setRelease_date(movieData.getRelease_date());
@@ -92,10 +81,12 @@ public class Utilities {
 
 		// getting genres from array to string
 		Genres[] myGenres = movieData.getGenres();
-		for (int x = 0; x < myGenres.length; x++) {
-
-			genreString = genreString + ":" + myGenres[x].getName();
+		
+		
+		for(Genres myGenresInfo: myGenres) {
+			genreString = genreString + ":" + myGenresInfo.getName();	
 		}
+		
 
 		myMovie.setPopularity(movieData.getPopularity());
 
@@ -104,11 +95,11 @@ public class Utilities {
 		myMovie.setMovieID(movieData.getId());
 
 		Spoken_languages[] langs = movieData.getSpoken_languages();
-
-		for (int y = 0; y < langs.length; y++) {
-
-			langString = langString + ":" + langs[y].getName();
+		
+		for(Spoken_languages langsInfo: langs) {
+			langString = langString + ":" +langsInfo.getName();
 		}
+
 
 		myMovie.setSpoken_languages(langString);
 
@@ -119,7 +110,7 @@ public class Utilities {
 		Utilities myUtils = new Utilities();
 		
 		logger.info("==================== searching by name ========================");
-		logger.info("api key val ==>" + myUtils.api_key);
+		
 		
 		String searchURL = "https://api.themoviedb.org/3/search/movie?api_key=88c29ac032cbe7242634c3450e93bdfd&language=en-US&query="
 				+ searchString + "&page=1&include_adult=false";
@@ -145,5 +136,7 @@ public class Utilities {
 
 		return movieResults;
 	}
+	
+	
 
 }

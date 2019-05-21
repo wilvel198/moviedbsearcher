@@ -7,10 +7,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.macmillan.movieinfo.models.MovieData;
 import com.macmillan.movieinfo.utilities.Utilities;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.logging.log4j.*;
 
@@ -44,11 +46,24 @@ public class TestUtils {
 		
 		res = utils.conntectToService(URL);
 		
-		System.out.println(res.getStatusCode());
-		
-		System.out.println(res.getBody().toString());
-		
 		assertEquals(200,res.getStatusCodeValue());
+		
+		assertTrue(res.getBody().toString().contains("The Lost Boys"));
+		
+		
+	}
+	
+	@Test
+	public void testGetMovieById() {
+		
+	  String movieId = "46812";
+	  String expectedMovieId = null;
+		
+	  MovieData movieInfo = Utilities.getMovieById(movieId);
+	  
+	  expectedMovieId = movieInfo.getMovieID();
+	  
+	  assertEquals(movieId,expectedMovieId);
 		
 		
 	}
