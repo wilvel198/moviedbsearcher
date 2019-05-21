@@ -26,19 +26,16 @@ import com.macmillan.movieinfo.smoviemodel.Genres;
 import com.macmillan.movieinfo.smoviemodel.Spoken_languages;
 import org.springframework.core.env.Environment;
 
-
-
 public class Utilities {
-	
+
 	final static Log logger = LogFactory.getLog(Utilities.class);
 
 	@Autowired
 	private static MovieDataRepository movieDataRepository;
-	
 
 	public static ResponseEntity<String> conntectToService(String URL) {
 		logger.info("=============> get service information <===================");
-		
+
 		ResponseEntity<String> result = null;
 
 		RestTemplate restTemplate = new RestTemplate();
@@ -69,7 +66,6 @@ public class Utilities {
 
 		ResponseEntity<String> serverInfo = conntectToService(URL);
 
-
 		json = serverInfo.getBody().toString();
 
 		DBMovieInfo movieData = gson.fromJson(json, DBMovieInfo.class);
@@ -81,12 +77,10 @@ public class Utilities {
 
 		// getting genres from array to string
 		Genres[] myGenres = movieData.getGenres();
-		
-		
-		for(Genres myGenresInfo: myGenres) {
-			genreString = genreString + ":" + myGenresInfo.getName();	
+
+		for (Genres myGenresInfo : myGenres) {
+			genreString = genreString + ":" + myGenresInfo.getName();
 		}
-		
 
 		myMovie.setPopularity(movieData.getPopularity());
 
@@ -95,11 +89,10 @@ public class Utilities {
 		myMovie.setMovieID(movieData.getId());
 
 		Spoken_languages[] langs = movieData.getSpoken_languages();
-		
-		for(Spoken_languages langsInfo: langs) {
-			langString = langString + ":" +langsInfo.getName();
-		}
 
+		for (Spoken_languages langsInfo : langs) {
+			langString = langString + ":" + langsInfo.getName();
+		}
 
 		myMovie.setSpoken_languages(langString);
 
@@ -108,10 +101,9 @@ public class Utilities {
 
 	public static List<MovieData> searchByName(String searchString) {
 		Utilities myUtils = new Utilities();
-		
+
 		logger.info("==================== searching by name ========================");
-		
-		
+
 		String searchURL = "https://api.themoviedb.org/3/search/movie?api_key=88c29ac032cbe7242634c3450e93bdfd&language=en-US&query="
 				+ searchString + "&page=1&include_adult=false";
 		String json = null;
@@ -136,7 +128,5 @@ public class Utilities {
 
 		return movieResults;
 	}
-	
-	
 
 }
