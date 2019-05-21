@@ -82,7 +82,7 @@ public class MoviedbsearcherApplicationTests {
 	public void testGetMovieById() throws Exception{
 		
 		mockMvc.perform(
-				MockMvcRequestBuilders.get("/api/v1/movieinfo/getmoviebyid/12345").accept(MediaType.APPLICATION_JSON))
+				MockMvcRequestBuilders.get("/api/v1/movieinfo/getmoviebyid/{movieId}","46812").accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andDo(print());
 		
 	}
@@ -90,7 +90,7 @@ public class MoviedbsearcherApplicationTests {
 	@Test
 	public void testSearchByName() throws Exception{
 		
-		String json = "{\"fullJson\": \"John Wick\"}"; 
+		String json = "{\"searchString\": \"John Wick\"}"; 
 
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/movieinfo/searchbyname")
 		.contentType(MediaType.APPLICATION_JSON).content(json))
